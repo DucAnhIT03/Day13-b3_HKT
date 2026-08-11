@@ -18,7 +18,7 @@
   - dashboard đủ 6 nhóm chỉ số;
   - bằng chứng điều tra challenge.
 
-## Không được nộp
+## Không được nộp.
 
 - `.env`, API key hoặc secret.
 - `.venv/`, cache, dependency đã cài.
