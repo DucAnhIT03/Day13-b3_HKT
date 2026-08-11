@@ -166,24 +166,41 @@ def calculate_snapshot(requests: pd.DataFrame) -> dict[str, Any]:
         return {
             "traffic": 0,
             "total_requests": 0,
+            "observed_requests": 0,
+            "successful_requests": 0,
+            "failed_requests": 0,
+            "pending_requests": 0,
+            "success_rate_pct": 0.0,
+            "request_rate_per_min": 0.0,
             "latency_p50": 0.0,
             "latency_p95": 0.0,
             "latency_p99": 0.0,
+            "latency_avg": 0.0,
             "avg_cost_usd": 0.0,
             "total_cost_usd": 0.0,
             "tokens_in_total": 0,
             "tokens_out_total": 0,
+            "tokens_avg": 0.0,
             "error_rate_pct": 0.0,
             "error_breakdown": {},
             "quality_avg": 0.0,
+            "active_sessions": 0,
+            "active_features": 0,
+            "active_models": 0,
+            "window_start": None,
+            "window_end": None,
         }
 
     successful = requests[requests["status"] == "Success"]
     failed = requests[requests["status"] == "Error"]
+    pending = requests[requests["status"] == "Pending"]
     latencies = successful["latency_ms"]
     costs = successful["cost_usd"]
     quality = successful["quality_score"]
     total_requests = len(successful) + len(failed)
+    window_start = pd.to_datetime(requests["timestamp"], utc=True).min()
+    window_end = pd.to_datetime(requests["timestamp"], utc=True).max()
+    duration_minutes = max((window_end - window_start).total_seconds() / 60, 1.0)
 
     def percentile(percent: float) -> float:
         return float(latencies.quantile(percent)) if not latencies.empty else 0.0
@@ -195,16 +212,33 @@ def calculate_snapshot(requests: pd.DataFrame) -> dict[str, Any]:
     return {
         "traffic": int(len(successful)),
         "total_requests": int(total_requests),
+        "observed_requests": int(len(requests)),
+        "successful_requests": int(len(successful)),
+        "failed_requests": int(len(failed)),
+        "pending_requests": int(len(pending)),
+        "success_rate_pct": round(len(successful) / total_requests * 100, 2) if total_requests else 0.0,
+        "request_rate_per_min": round(total_requests / duration_minutes, 2),
         "latency_p50": round(percentile(0.50), 1),
         "latency_p95": round(percentile(0.95), 1),
         "latency_p99": round(percentile(0.99), 1),
+        "latency_avg": round(float(latencies.mean()), 1) if not latencies.empty else 0.0,
         "avg_cost_usd": round(float(costs.mean()), 6) if not costs.empty else 0.0,
         "total_cost_usd": round(float(costs.sum()), 6),
         "tokens_in_total": int(successful["tokens_in"].sum()),
         "tokens_out_total": int(successful["tokens_out"].sum()),
+        "tokens_avg": round(
+            float((successful["tokens_in"] + successful["tokens_out"]).mean()), 1
+        )
+        if not successful.empty
+        else 0.0,
         "error_rate_pct": round(len(failed) / total_requests * 100, 2) if total_requests else 0.0,
         "error_breakdown": error_breakdown,
         "quality_avg": round(float(quality.mean()), 4) if not quality.empty else 0.0,
+        "active_sessions": int(requests["session_id"].replace("unknown", pd.NA).nunique()),
+        "active_features": int(requests["feature"].replace("unknown", pd.NA).nunique()),
+        "active_models": int(requests["model"].replace("unknown", pd.NA).nunique()),
+        "window_start": window_start,
+        "window_end": window_end,
     }
 
 
@@ -212,12 +246,30 @@ def build_trends(requests: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """Build minute-level data sets used by the dashboard charts."""
     empty = pd.DataFrame()
     if requests.empty:
-        return {name: empty.copy() for name in ("latency", "traffic", "errors", "cost", "tokens", "quality")}
+        return {
+            name: empty.copy()
+            for name in (
+                "latency",
+                "traffic",
+                "errors",
+                "cost",
+                "tokens",
+                "quality",
+                "request_series",
+                "outcomes",
+            )
+        }
 
     data = requests.copy()
     data["minute"] = pd.to_datetime(data["timestamp"], utc=True).dt.floor("min")
     data = data[data["minute"].notna()]
     successful = data[data["status"] == "Success"]
+
+    request_series = successful.sort_values("timestamp", kind="stable").copy()
+    if not request_series.empty:
+        request_series["cumulative_cost_usd"] = request_series["cost_usd"].cumsum()
+        request_series["rolling_p95_ms"] = request_series["latency_ms"].expanding().quantile(0.95)
+        request_series["total_tokens"] = request_series["tokens_in"] + request_series["tokens_out"]
 
     if successful.empty:
         latency = cost = tokens = quality = empty.copy()
@@ -244,6 +296,12 @@ def build_trends(requests: pd.DataFrame) -> dict[str, pd.DataFrame]:
         .reset_index()
     )
     error_counts["error_rate_pct"] = error_counts["errors"] / error_counts["total"] * 100
+    outcomes = (
+        data.groupby(["minute", "status"])
+        .size()
+        .rename("requests")
+        .reset_index()
+    )
     return {
         "latency": latency,
         "traffic": traffic,
@@ -251,7 +309,62 @@ def build_trends(requests: pd.DataFrame) -> dict[str, pd.DataFrame]:
         "cost": cost,
         "tokens": tokens,
         "quality": quality,
+        "request_series": request_series,
+        "outcomes": outcomes,
     }
+
+
+def build_feature_summary(requests: pd.DataFrame) -> pd.DataFrame:
+    """Aggregate service, cost and quality signals by feature."""
+    columns = [
+        "feature",
+        "requests",
+        "success_rate_pct",
+        "latency_p95_ms",
+        "error_rate_pct",
+        "total_cost_usd",
+        "avg_cost_usd",
+        "tokens_total",
+        "quality_avg",
+    ]
+    if requests.empty:
+        return pd.DataFrame(columns=columns)
+
+    rows: list[dict[str, Any]] = []
+    for feature, group in requests.groupby("feature", dropna=False):
+        terminal = group[group["status"].isin(["Success", "Error"])]
+        successful = group[group["status"] == "Success"]
+        failed = group[group["status"] == "Error"]
+        denominator = len(terminal)
+        rows.append(
+            {
+                "feature": str(feature),
+                "requests": int(denominator),
+                "success_rate_pct": round(len(successful) / denominator * 100, 2)
+                if denominator
+                else 0.0,
+                "latency_p95_ms": round(float(successful["latency_ms"].quantile(0.95)), 1)
+                if not successful.empty
+                else 0.0,
+                "error_rate_pct": round(len(failed) / denominator * 100, 2)
+                if denominator
+                else 0.0,
+                "total_cost_usd": round(float(successful["cost_usd"].sum()), 6),
+                "avg_cost_usd": round(float(successful["cost_usd"].mean()), 6)
+                if not successful.empty
+                else 0.0,
+                "tokens_total": int(
+                    successful["tokens_in"].sum() + successful["tokens_out"].sum()
+                ),
+                "quality_avg": round(float(successful["quality_score"].mean()), 4)
+                if not successful.empty
+                else 0.0,
+            }
+        )
+
+    return pd.DataFrame(rows, columns=columns).sort_values(
+        ["requests", "feature"], ascending=[False, True], kind="stable"
+    )
 
 
 def load_yaml(path: Path) -> dict[str, Any]:

@@ -3,7 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from app.dashboard_data import build_requests, build_trends, calculate_snapshot, filter_logs, load_logs
+from app.dashboard_data import (
+    build_feature_summary,
+    build_requests,
+    build_trends,
+    calculate_snapshot,
+    filter_logs,
+    load_logs,
+)
 
 
 def write_log(path: Path, records: list[dict]) -> None:
@@ -56,6 +63,7 @@ def test_dashboard_builds_six_metric_groups_from_request_journeys(tmp_path: Path
     requests = build_requests(logs)
     snapshot = calculate_snapshot(requests)
     trends = build_trends(requests)
+    feature_summary = build_feature_summary(requests)
 
     assert snapshot["total_requests"] == 2
     assert snapshot["traffic"] == 1
@@ -66,7 +74,21 @@ def test_dashboard_builds_six_metric_groups_from_request_journeys(tmp_path: Path
     assert snapshot["tokens_out_total"] == 20
     assert snapshot["quality_avg"] == 0.9
     assert snapshot["error_breakdown"] == {"TimeoutError": 1}
-    assert set(trends) == {"latency", "traffic", "errors", "cost", "tokens", "quality"}
+    assert set(trends) == {
+        "latency",
+        "traffic",
+        "errors",
+        "cost",
+        "tokens",
+        "quality",
+        "request_series",
+        "outcomes",
+    }
+    assert snapshot["success_rate_pct"] == 50
+    assert snapshot["active_features"] == 2
+    assert snapshot["active_sessions"] == 1
+    assert feature_summary["feature"].tolist() == ["refund", "search"]
+    assert feature_summary["requests"].tolist() == [1, 1]
 
 
 def test_dashboard_filters_by_feature_and_latest_window(tmp_path: Path) -> None:
