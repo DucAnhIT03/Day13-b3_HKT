@@ -1,0 +1,8 @@
+Command: python scripts/load_test.py --challenge --concurrency 5
+
+Challenge: day13-k3-observability-v1 | Cohort: K3
+[200] req-36c03d88 | refund | 10636.7ms
+[200] req-ad496da0 | refund | 10634.3ms
+[200] req-c93d6e06 | refund | 13296.1ms
+[200] req-c95e7f1d | refund | 13297.9ms
+[200] req-ca36739a | refund | 13297.9ms

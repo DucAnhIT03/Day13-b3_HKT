@@ -1,0 +1,35 @@
+{
+  "challenge_id": "day13-k3-observability-v1",
+  "workload": "5 official refund queries, concurrency 5",
+  "challenge_latency_threshold_ms": 2000,
+  "baseline": {
+    "traffic": 5,
+    "latency_p50_ms": 150.0,
+    "latency_p95_ms": 151.0,
+    "latency_p99_ms": 151.0,
+    "error_rate_pct": 0.0,
+    "total_cost_usd": 0.0094,
+    "tokens_in_total": 162,
+    "tokens_out_total": 594,
+    "quality_avg": 0.86
+  },
+  "incident": {
+    "incident": "rag_slow",
+    "traffic": 5,
+    "latency_p50_ms": 2651.0,
+    "latency_p95_ms": 2652.0,
+    "latency_p99_ms": 2652.0,
+    "error_rate_pct": 0.0,
+    "total_cost_usd": 0.0088,
+    "tokens_in_total": 162,
+    "tokens_out_total": 557,
+    "quality_avg": 0.86
+  },
+  "comparison": {
+    "latency_p95_increase_ms": 2501.0,
+    "latency_p95_multiplier": 17.56,
+    "threshold_exceeded_by_ms": 652.0,
+    "latency_threshold_breached": true,
+    "error_or_cost_spike_observed": false
+  }
+}

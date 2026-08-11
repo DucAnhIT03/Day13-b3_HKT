@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">Raw JSON log evidence for correlation req-36c03d88</title>
+  <desc id="desc">Two JSONL events connect the refund request to a response latency of 2651 milliseconds.</desc>
+  <rect width="1200" height="650" fill="#111827"/>
+  <text x="42" y="52" font-family="Consolas, monospace" font-size="24" font-weight="600" fill="#f3f4f6">Raw JSONL Evidence — req-36c03d88</text>
+  <text x="42" y="82" font-family="Consolas, monospace" font-size="14" fill="#93a4bb">Rendered from submission/evidence/cp3-correlation-log.jsonl</text>
+
+  <text x="42" y="130" font-family="Consolas, monospace" font-size="15" fill="#67e8f9">request_received</text>
+  <g font-family="Consolas, monospace" font-size="14" fill="#e5e7eb">
+    <text x="42" y="164">{"service":"api","event":"request_received",</text>
+    <text x="62" y="192">"feature":"refund","session_id":"k3-challenge-s01",</text>
+    <text x="62" y="220">"model":"claude-sonnet-4-5","env":"dev",</text>
+    <text x="62" y="248">"correlation_id":"req-36c03d88","level":"info",</text>
+    <text x="62" y="276">"ts":"2026-08-11T04:06:25.027350Z"}</text>
+  </g>
+
+  <line x1="42" y1="312" x2="1158" y2="312" stroke="#334155"/>
+  <text x="42" y="354" font-family="Consolas, monospace" font-size="15" fill="#fca5a5">response_sent</text>
+  <g font-family="Consolas, monospace" font-size="14" fill="#e5e7eb">
+    <text x="42" y="388">{"service":"api","event":"response_sent",</text>
+    <text x="62" y="416">"feature":"refund","latency_ms":2651,</text>
+    <text x="62" y="444">"tokens_in":29,"tokens_out":95,"cost_usd":0.001512,</text>
+    <text x="62" y="472">"quality_score":0.9,"correlation_id":"req-36c03d88",</text>
+    <text x="62" y="500">"level":"info","ts":"2026-08-11T04:06:27.680418Z"}</text>
+  </g>
+
+  <rect x="42" y="548" width="1116" height="58" rx="6" fill="#1f2937" stroke="#475569"/>
+  <text x="62" y="584" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#f3f4f6">Same correlation ID proves the request journey; measured latency aligns with the injected 2.5-second RAG delay.</text>
+</svg>

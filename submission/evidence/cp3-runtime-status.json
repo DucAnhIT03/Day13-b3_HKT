@@ -1,0 +1,20 @@
+{
+  "captured_before_official_challenge_load": {
+    "ok": true,
+    "tracing_enabled": false,
+    "incidents": {
+      "rag_slow": true,
+      "tool_fail": false,
+      "cost_spike": false
+    }
+  },
+  "captured_after_investigation": {
+    "ok": true,
+    "tracing_enabled": false,
+    "incidents": {
+      "rag_slow": false,
+      "tool_fail": false,
+      "cost_spike": false
+    }
+  }
+}

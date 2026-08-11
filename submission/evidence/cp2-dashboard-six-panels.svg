@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Day 13 AI Observability dashboard with six metric groups</title>
+  <desc id="desc">Official incident snapshot showing latency, traffic, error, cost, tokens, and quality panels from the metrics endpoint.</desc>
+  <rect width="1200" height="800" fill="#f5f7fb"/>
+  <text x="45" y="54" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="600" fill="#172033">Day 13 AI Observability</text>
+  <text x="45" y="82" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#58677f">Official incident snapshot · Time range 60 minutes · Refresh 30 seconds · Source GET /metrics</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="45" y="115" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="70" y="151" font-size="17" font-weight="600" fill="#172033">Latency percentiles</text>
+    <text x="70" y="198" font-size="34" font-weight="600" fill="#ba2d2d">2,652 ms</text>
+    <text x="70" y="225" font-size="14" fill="#58677f">P95 · SLO ≤ 3,000 ms · challenge ≤ 2,000 ms</text>
+    <line x1="70" y1="264" x2="355" y2="264" stroke="#d7deea" stroke-width="8"/>
+    <line x1="70" y1="264" x2="322" y2="264" stroke="#ba2d2d" stroke-width="8"/>
+    <line x1="260" y1="250" x2="260" y2="278" stroke="#a76b16" stroke-width="3" stroke-dasharray="4 3"/>
+    <text x="70" y="299" font-size="14" fill="#58677f">P50 2,651 · P99 2,652</text>
+    <text x="70" y="326" font-size="14" font-weight="600" fill="#ba2d2d">CHALLENGE BREACH</text>
+
+    <rect x="430" y="115" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="455" y="151" font-size="17" font-weight="600" fill="#172033">Request traffic</text>
+    <text x="455" y="206" font-size="38" font-weight="600" fill="#172033">5</text>
+    <text x="510" y="206" font-size="16" fill="#58677f">requests</text>
+    <text x="455" y="244" font-size="14" fill="#58677f">Official refund workload · concurrency 5</text>
+    <text x="455" y="309" font-size="14" font-weight="600" fill="#24784a">ACTIVITY PRESENT</text>
+
+    <rect x="815" y="115" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="840" y="151" font-size="17" font-weight="600" fill="#172033">Error rate and breakdown</text>
+    <text x="840" y="206" font-size="38" font-weight="600" fill="#24784a">0.0%</text>
+    <text x="840" y="244" font-size="14" fill="#58677f">SLO ≤ 2% · critical alert &gt; 5%</text>
+    <text x="840" y="281" font-size="14" fill="#58677f">Error breakdown: none</text>
+    <text x="840" y="309" font-size="14" font-weight="600" fill="#24784a">OK</text>
+
+    <rect x="45" y="390" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="70" y="426" font-size="17" font-weight="600" fill="#172033">Cost</text>
+    <text x="70" y="481" font-size="38" font-weight="600" fill="#172033">$0.0088</text>
+    <text x="70" y="519" font-size="14" fill="#58677f">Total · average $0.0018/request</text>
+    <text x="70" y="556" font-size="14" fill="#58677f">Daily budget threshold ≤ $2.50</text>
+    <text x="70" y="584" font-size="14" font-weight="600" fill="#24784a">WITHIN BUDGET</text>
+
+    <rect x="430" y="390" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="455" y="426" font-size="17" font-weight="600" fill="#172033">Input and output tokens</text>
+    <text x="455" y="481" font-size="34" font-weight="600" fill="#172033">162 <tspan font-size="15" fill="#58677f">input</tspan></text>
+    <text x="455" y="531" font-size="34" font-weight="600" fill="#172033">557 <tspan font-size="15" fill="#58677f">output</tspan></text>
+    <text x="455" y="570" font-size="14" fill="#58677f">719 total · guardrail 50,000/60m</text>
+    <text x="455" y="597" font-size="14" font-weight="600" fill="#24784a">OK</text>
+
+    <rect x="815" y="390" width="340" height="230" rx="12" fill="#ffffff" stroke="#d7deea"/>
+    <text x="840" y="426" font-size="17" font-weight="600" fill="#172033">Quality proxy</text>
+    <text x="840" y="481" font-size="38" font-weight="600" fill="#24784a">0.86</text>
+    <text x="840" y="519" font-size="14" fill="#58677f">Average score · target ≥ 0.75</text>
+    <line x1="840" y1="558" x2="1125" y2="558" stroke="#d7deea" stroke-width="8"/>
+    <line x1="840" y1="558" x2="1085" y2="558" stroke="#24784a" stroke-width="8"/>
+    <line x1="1054" y1="544" x2="1054" y2="572" stroke="#a76b16" stroke-width="3" stroke-dasharray="4 3"/>
+    <text x="840" y="597" font-size="14" font-weight="600" fill="#24784a">MEETS TARGET</text>
+  </g>
+
+  <text x="45" y="680" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#172033">Investigation path</text>
+  <text x="45" y="708" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#58677f">Metrics: P95 breach → Trace: retrieve span (requires Langfuse) → Logs: correlation req-36c03d88</text>
+  <text x="45" y="756" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6b7890">Values captured from the official rag_slow challenge run. This is a rendered evidence snapshot, not a fabricated Langfuse screenshot.</text>
+</svg>

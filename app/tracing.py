@@ -35,3 +35,13 @@ def tracing_enabled() -> bool:
     return LANGFUSE_SDK_AVAILABLE and bool(
         os.getenv("LANGFUSE_PUBLIC_KEY") and os.getenv("LANGFUSE_SECRET_KEY")
     )
+
+
+def tracing_context_active() -> bool:
+    if not tracing_enabled():
+        return False
+    try:
+        from opentelemetry.trace import get_current_span
+    except ImportError:  # pragma: no cover - installed transitively with Langfuse
+        return False
+    return get_current_span().get_span_context().is_valid

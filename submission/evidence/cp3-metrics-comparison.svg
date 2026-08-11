@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Official challenge P95 latency comparison</title>
+  <desc id="desc">Baseline P95 was 151 milliseconds. During rag_slow, P95 was 2652 milliseconds, above the 2000 millisecond challenge threshold.</desc>
+  <rect width="960" height="540" fill="#ffffff"/>
+  <text x="48" y="56" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="600" fill="#172033">Official Challenge — P95 Latency</text>
+  <text x="48" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#526079">day13-k3-observability-v1 · 5 refund queries · concurrency 5</text>
+
+  <line x1="170" y1="410" x2="890" y2="410" stroke="#9aa5b5" stroke-width="2"/>
+  <line x1="170" y1="130" x2="170" y2="410" stroke="#9aa5b5" stroke-width="2"/>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#526079" text-anchor="middle">
+    <text x="170" y="438">0</text>
+    <text x="410" y="438">1,000</text>
+    <text x="650" y="438">2,000</text>
+    <text x="890" y="438">3,000 ms</text>
+  </g>
+  <g stroke="#d8dee8" stroke-width="1">
+    <line x1="410" y1="130" x2="410" y2="410"/>
+    <line x1="890" y1="130" x2="890" y2="410"/>
+  </g>
+
+  <line x1="650" y1="118" x2="650" y2="410" stroke="#b7791f" stroke-width="3" stroke-dasharray="8 7"/>
+  <text x="650" y="110" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#8a5a16" text-anchor="middle">Challenge threshold: 2,000 ms</text>
+
+  <text x="150" y="213" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#172033" text-anchor="end">Baseline</text>
+  <rect x="170" y="178" width="36" height="52" rx="4" fill="#2f855a"/>
+  <text x="218" y="211" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#172033">151 ms</text>
+
+  <text x="150" y="318" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#172033" text-anchor="end">rag_slow</text>
+  <rect x="170" y="283" width="636" height="52" rx="4" fill="#c53030"/>
+  <text x="794" y="318" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#ffffff" text-anchor="end">2,652 ms</text>
+
+  <text x="48" y="482" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#172033">P95 increased by 2,501 ms (17.6×) and exceeded the challenge threshold by 652 ms.</text>
+  <text x="48" y="512" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#526079">Source: GET /metrics snapshots collected before and during the official incident. Error rate remained 0%.</text>
+</svg>
