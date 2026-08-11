@@ -37,7 +37,7 @@
 ## 5. Dashboard, SLO và alerts
 
 - Kết quả `validate_dashboard.py`: 6/6 panel hợp lệ — [`evidence/cp2-dashboard-validator.txt`](evidence/cp2-dashboard-validator.txt)
-- Evidence dashboard: [dashboard 6 nhóm chỉ số](evidence/cp2-dashboard-six-panels.png), [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và [`config/dashboard.yaml`](../config/dashboard.yaml)
+- Evidence dashboard: [dashboard Streamlit runtime](evidence/cp2-streamlit-dashboard.png), [dashboard 6 nhóm chỉ số](evidence/cp2-dashboard-six-panels.png), [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và [`config/dashboard.yaml`](../config/dashboard.yaml)
 - SLO đã chọn và lý do: P95 ≤ 3 giây, error rate ≤ 2%, daily cost ≤ 2,50 USD và quality trung bình ≥ 0,75; các ngưỡng cân bằng trải nghiệm người dùng, độ tin cậy, ngân sách và chất lượng câu trả lời.
 - Alert rules và runbook: [`config/alert_rules.yaml`](../config/alert_rules.yaml) và [`docs/alerts.md`](../docs/alerts.md)
 

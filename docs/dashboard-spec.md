@@ -1,6 +1,6 @@
 # Dashboard specification — Day 13 AI Observability
 
-Dashboard được mô tả bằng spec trong repo, không phụ thuộc một dịch vụ dashboard bên ngoài. Nguồn runtime chính là endpoint `GET /metrics`; `data/logs.jsonl` là nguồn chi tiết để tái tính toán và drill-down. Contract máy đọc nằm tại [`config/dashboard.yaml`](../config/dashboard.yaml), time range mặc định là **60 phút** và refresh mỗi **30 giây**.
+Dashboard runtime được triển khai bằng Streamlit tại [`streamlit_app.py`](../streamlit_app.py). Giao diện kiểm tra trạng thái qua `GET /health` và `GET /metrics`, đồng thời dùng `data/logs.jsonl` để tái tính toán biểu đồ theo thời gian và drill-down theo correlation ID. Contract máy đọc nằm tại [`config/dashboard.yaml`](../config/dashboard.yaml), time range mặc định là **60 phút** và refresh mỗi **30 giây**. Hướng dẫn chạy nằm tại [`docs/STREAMLIT_DASHBOARD.md`](STREAMLIT_DASHBOARD.md).
 
 ## Bố cục 6 panel chính
 
@@ -34,4 +34,4 @@ python scripts/validate_dashboard.py
 curl http://127.0.0.1:8000/metrics
 ```
 
-Evidence cần cho thấy đủ tên 6 panel, time range 60 phút, đơn vị và threshold. Nếu chỉ nộp spec, đính kèm file validator output cùng commit chứa ba file `dashboard-spec.md`, `dashboard.yaml` và `slo.yaml`.
+Evidence cần cho thấy đủ tên 6 panel, time range 60 phút, đơn vị và threshold. Ảnh runtime hiện tại nằm tại [`submission/evidence/cp2-streamlit-dashboard.png`](../submission/evidence/cp2-streamlit-dashboard.png); file validator vẫn được giữ để chứng minh contract cấu hình hợp lệ.
