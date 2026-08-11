@@ -112,6 +112,8 @@ start http://127.0.0.1:8000/dashboard
 
 Endpoint `/dashboard` là triển khai runtime của spec: đọc trực tiếp `data/logs.jsonl`, lọc 60 phút gần nhất và tự refresh mỗi 30 giây. Đây là nguồn dùng để chụp evidence; `/metrics` chỉ dùng đối chiếu snapshot trong bộ nhớ.
 
+Endpoint `/dashboard/data` công khai chính payload tổng hợp được dùng để render dashboard. Evidence nên gồm cả screenshot và JSON từ endpoint này để chứng minh các con số trên sáu panel xuất phát từ log runtime.
+
 Kết quả validator hợp lệ phải chứa:
 
 ```text

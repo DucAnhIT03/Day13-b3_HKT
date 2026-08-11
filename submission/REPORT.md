@@ -11,7 +11,7 @@
 
 ## 2. Kết quả kỹ thuật
 
-- Điểm `validate_logs.py`: 100/100 (kết quả cuối: 42 log records, 20 correlation IDs, không thiếu metadata) — [`evidence/final-validation.txt`](evidence/final-validation.txt)
+- Điểm `validate_logs.py`: 100/100 (kết quả cuối: 43 log records, 20 correlation IDs, không thiếu metadata) — [`evidence/final-validation.txt`](evidence/final-validation.txt)
 - Tổng số traces có evidence trong nhánh hiện tại: 0 — Langfuse credentials đã được cấu hình cục bộ nhưng nhóm chưa tạo và đưa danh sách trace hợp lệ vào `submission/evidence/`; không tạo evidence giả
 - Số PII leak còn lại: 0
 - Link/đường dẫn dashboard: runtime `GET /dashboard`, [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và [`config/dashboard.yaml`](../config/dashboard.yaml)
@@ -34,7 +34,7 @@
 ## 5. Dashboard, SLO và alerts
 
 - Kết quả `validate_dashboard.py`: 6/6 panel hợp lệ — [`evidence/cp2-dashboard-validator.txt`](evidence/cp2-dashboard-validator.txt)
-- Evidence dashboard: [dashboard runtime 6 nhóm chỉ số](evidence/cp2-dashboard-runtime.png), [ảnh dashboard spec](evidence/cp2-dashboard-six-panels.png), [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và [`config/dashboard.yaml`](../config/dashboard.yaml)
+- Evidence dashboard: [dashboard runtime 6 nhóm chỉ số](evidence/cp2-dashboard-runtime.png), [payload runtime máy đọc được](evidence/cp2-dashboard-runtime.json), [ảnh dashboard spec](evidence/cp2-dashboard-six-panels.png), [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và [`config/dashboard.yaml`](../config/dashboard.yaml)
 - SLO đã chọn và lý do: P95 ≤ 3 giây, error rate ≤ 2%, daily cost ≤ 2,50 USD và quality trung bình ≥ 0,75; các ngưỡng cân bằng trải nghiệm người dùng, độ tin cậy, ngân sách và chất lượng câu trả lời.
 - Alert rules và runbook: [`config/alert_rules.yaml`](../config/alert_rules.yaml) và [`docs/alerts.md`](../docs/alerts.md)
 

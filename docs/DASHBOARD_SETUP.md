@@ -33,6 +33,8 @@ Validator kiểm tra cấu trúc contract; nó không thể chứng minh biểu 
 
 Dashboard runtime có đúng sáu panel, cửa sổ 60 phút và tự refresh sau 30 giây. Nếu panel hiển thị `NO DATA`, hãy chạy load test rồi tải lại trang; dashboard không diễn giải việc thiếu mẫu thành giá trị 0 đạt SLO.
 
+Để kiểm tra cùng dữ liệu dưới dạng máy đọc được, mở `http://127.0.0.1:8000/dashboard/data`. Endpoint trả về metadata cửa sổ thời gian và toàn bộ phép tổng hợp đang dùng để dựng sáu panel; có thể lưu payload này cùng screenshot làm evidence đối chiếu.
+
 ## Cách kiểm tra runtime
 
 1. Lưu ảnh baseline và giá trị P95/error/cost hiện tại.

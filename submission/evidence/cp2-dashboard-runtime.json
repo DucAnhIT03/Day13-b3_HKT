@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-11T05:00:17.411846+00:00",
+  "source": "data/logs.jsonl",
+  "time_range_minutes": 60,
+  "refresh_seconds": 30,
+  "metrics": {
+    "record_count": 43,
+    "request_count": 20,
+    "response_count": 20,
+    "latency_p50": 151.0,
+    "latency_p95": 166.0,
+    "latency_p99": 166.0,
+    "traffic_peak_rpm": 10,
+    "traffic_by_minute": {
+      "04:22": 10,
+      "04:48": 10
+    },
+    "error_rate_pct": 0.0,
+    "error_breakdown": {},
+    "total_cost_usd": 0.040515,
+    "avg_cost_usd": 0.002026,
+    "tokens_in_total": 660,
+    "tokens_out_total": 2569,
+    "quality_avg": 0.88
+  }
+}
