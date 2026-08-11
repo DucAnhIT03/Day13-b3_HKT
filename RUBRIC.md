@@ -27,7 +27,7 @@
 - Mô tả rõ phần việc cá nhân.
 - Trả lời được câu hỏi về logging, tracing, prompt version, PII, percentile hoặc alert liên quan đến phần việc.
 
-### B2. Bằng chứng đóng góp — 20 điểm..
+### B2. Bằng chứng đóng góp — 20 điểm...
 
 - Có commit/PR cụ thể và có thể kiểm tra.
 - Phần khai báo trong report khớp với thay đổi trong Git.
