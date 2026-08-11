@@ -52,7 +52,7 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
-| VŨ ĐĂNG HUY — 2A202601761 | Hoàn thiện `CorrelationIdMiddleware`; tiếp nhận hoặc sinh Correlation ID dạng `req-xxxxxxxx`; bind ID vào `structlog.contextvars`; truyền ID qua request state, log, response body/header; bổ sung `x-response-time-ms`; thêm handler cho HTTP exception và unhandled exception; viết test middleware. | [`c489015`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/c48901597063c72e26957e9f2114366b2995a72d) | Correlation ID giúp nối các log của cùng request nhưng không thay thế trace/span ID; context phải được xóa sau request để tránh lẫn dữ liệu; response lỗi cần giữ mã điều tra nhưng không làm lộ chi tiết nội bộ. |
+| VŨ ĐĂNG HUY — 2A202601761 | Hoàn thiện `CorrelationIdMiddleware`; tiếp nhận hoặc sinh Correlation ID dạng `req-xxxxxxxx`; bind ID vào `structlog.contextvars`; truyền ID qua request state, log, response body/header; bổ sung `x-response-time-ms`; thêm handler cho HTTP exception và unhandled exception; viết test middleware. | [`1a1e99f`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/1a1e99ffb65e0e1cd8fb8183aa1c622b1de8e2d5) | Correlation ID giúp nối các log của cùng request nhưng không thay thế trace/span ID; context phải được xóa sau request để tránh lẫn dữ liệu; response lỗi cần giữ mã điều tra nhưng không làm lộ chi tiết nội bộ. |
 
 ### 7.1. Báo cáo cá nhân — VŨ ĐĂNG HUY (2A202601761)
 
