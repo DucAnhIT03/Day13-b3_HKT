@@ -103,6 +103,20 @@ def build_dashboard_snapshot(records: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_runtime_dashboard_data(*, now: datetime | None = None) -> dict[str, Any]:
+    """Return the machine-readable payload used by the HTML dashboard."""
+    reference = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    records = load_recent_records(now=reference)
+    return {
+        "schema_version": 1,
+        "generated_at": reference.isoformat(),
+        "source": logging_config.LOG_PATH.as_posix(),
+        "time_range_minutes": WINDOW_MINUTES,
+        "refresh_seconds": REFRESH_SECONDS,
+        "metrics": build_dashboard_snapshot(records),
+    }
+
+
 def _status(value: float, threshold: float, operator: str, *, has_data: bool) -> tuple[str, str]:
     if not has_data:
         return "NO DATA", "neutral"
@@ -123,7 +137,8 @@ def _bars(values: list[float], *, color: str = "#4f8cff") -> str:
 
 def render_dashboard(*, now: datetime | None = None) -> str:
     reference = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    snapshot = build_dashboard_snapshot(load_recent_records(now=reference))
+    payload = build_runtime_dashboard_data(now=reference)
+    snapshot = payload["metrics"]
 
     has_responses = snapshot["response_count"] > 0
     has_requests = snapshot["request_count"] > 0

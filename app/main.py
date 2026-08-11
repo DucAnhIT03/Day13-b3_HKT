@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from structlog.contextvars import bind_contextvars
 
 from .agent import LabAgent
-from .dashboard import render_dashboard
+from .dashboard import build_runtime_dashboard_data, render_dashboard
 from .incidents import disable, enable, status
 from .logging_config import configure_logging, get_logger
 from .metrics import record_error, snapshot
@@ -46,6 +46,11 @@ async def metrics() -> dict:
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard() -> str:
     return render_dashboard()
+
+
+@app.get("/dashboard/data")
+async def dashboard_data() -> dict:
+    return build_runtime_dashboard_data()
 
 
 @app.exception_handler(Exception)
