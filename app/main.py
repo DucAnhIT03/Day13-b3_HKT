@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import time
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -20,6 +21,49 @@ log = get_logger()
 app = FastAPI(title="Day 13 Observability Lab")
 app.add_middleware(CorrelationIdMiddleware)
 agent = LabAgent()
+
+
+def _error_headers(request: Request) -> dict[str, str]:
+    correlation_id = getattr(request.state, "correlation_id", "MISSING")
+    started_at = getattr(request.state, "request_started_at", time.perf_counter())
+    elapsed_ms = (time.perf_counter() - started_at) * 1000
+    return {
+        "x-request-id": correlation_id,
+        "x-response-time-ms": f"{elapsed_ms:.2f}",
+    }
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    """Keep correlation data available on expected HTTP errors."""
+    correlation_id = getattr(request.state, "correlation_id", "MISSING")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail, "correlation_id": correlation_id},
+        headers=_error_headers(request),
+    )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Return a safe error while retaining the request's investigation key."""
+    correlation_id = getattr(request.state, "correlation_id", "MISSING")
+    error_type = type(exc).__name__
+    record_error(error_type)
+    log.error(
+        "unhandled_request_error",
+        service="api",
+        correlation_id=correlation_id,
+        error_type=error_type,
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Internal Server Error",
+            "correlation_id": correlation_id,
+        },
+        headers=_error_headers(request),
+    )
 
 
 @app.on_event("startup")
