@@ -4,7 +4,7 @@
 
 - Tên nhóm: HKT
 - Repository URL: [https://github.com/DucAnhIT03/Day13-b3_HKT](https://github.com/DucAnhIT03/Day13-b3_HKT)
-- Commit SHA triển khai chính: `TO_BE_UPDATED_AFTER_COMMIT`
+- Commit SHA triển khai chính: [`13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f)
 - Thành viên và vai trò: Nguyễn Đức Anh — mã học viên `2A202601063` — Developer/Observability Engineer; phụ trách logging, metrics, tracing instrumentation, dashboard/SLO/alerts, điều tra incident và tổng hợp evidence.
 
 ## 2. Kết quả kỹ thuật
@@ -52,4 +52,4 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
-| Nguyễn Đức Anh (`2A202601063`) | Hoàn thiện correlation ID, structured logging, PII scrubbing, trace metadata/sub-spans, error-rate metrics, dashboard 6 panel, SLO, alert rules/runbook; chạy official challenge `rag_slow`, phân tích Metrics → Logs và tổng hợp evidence/report. | `TO_BE_UPDATED_AFTER_COMMIT` | Correlation ID giúp nối request xuyên lớp; symptom-based alert ổn định hơn implementation alert; metrics phát hiện triệu chứng còn trace/log mới khoanh vùng được root cause; blocking I/O trong async handler gây head-of-line blocking. |
+| Nguyễn Đức Anh (`2A202601063`) | Hoàn thiện correlation ID, structured logging, PII scrubbing, trace metadata/sub-spans, error-rate metrics, dashboard 6 panel, SLO, alert rules/runbook; chạy official challenge `rag_slow`, phân tích Metrics → Logs và tổng hợp evidence/report. | [Commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | Correlation ID giúp nối request xuyên lớp; symptom-based alert ổn định hơn implementation alert; metrics phát hiện triệu chứng còn trace/log mới khoanh vùng được root cause; blocking I/O trong async handler gây head-of-line blocking. |
