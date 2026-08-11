@@ -400,21 +400,33 @@ def render_reliability(snapshot: dict[str, Any], slo: dict[str, Any], alerts: di
         severity = str(alert.get("severity", "warning"))
         alert_rows.append(
             {
-                "Trạng thái": ":red-badge[:material/crisis_alert: FIRING]" if firing else ":green-badge[:material/check_circle: NORMAL]",
+                "Trạng thái": "● FIRING" if firing else "✓ NORMAL",
                 "Alert": name,
-                "Severity": f":{'red' if severity == 'critical' else 'orange'}-badge[{severity.upper()}]",
+                "Severity": f"{'●' if severity == 'critical' else '▲'} {severity.upper()}",
                 "Điều kiện": alert.get("condition", ""),
                 "Owner": alert.get("owner", ""),
                 "Runbook": alert.get("runbook", ""),
             }
         )
+    alert_frame = pd.DataFrame(alert_rows)
+
+    def alert_color(value: str) -> str:
+        if "FIRING" in value or "CRITICAL" in value:
+            return "color: #F87171; font-weight: 700"
+        if "WARNING" in value:
+            return "color: #FBBF24; font-weight: 700"
+        if "NORMAL" in value:
+            return "color: #34D399; font-weight: 700"
+        return ""
+
+    styled_alerts = alert_frame.style.map(alert_color, subset=["Trạng thái", "Severity"])
     st.dataframe(
-        pd.DataFrame(alert_rows),
+        styled_alerts,
         hide_index=True,
         column_config={
-            "Trạng thái": st.column_config.MarkdownColumn(pinned=True),
+            "Trạng thái": st.column_config.TextColumn(pinned=True),
             "Alert": st.column_config.TextColumn(pinned=True),
-            "Severity": st.column_config.MarkdownColumn(),
+            "Severity": st.column_config.TextColumn(),
             "Điều kiện": st.column_config.TextColumn(width="large"),
             "Runbook": st.column_config.TextColumn(width="medium"),
         },
@@ -446,26 +458,33 @@ def render_investigation(requests: pd.DataFrame, logs: pd.DataFrame) -> None:
     journey["Thời điểm"] = journey["timestamp"]
     journey["Sự kiện"] = journey["event"]
     journey["Mức độ"] = journey["level"].str.upper()
-    journey["Chi tiết"] = journey.get("payload_detail", pd.Series(index=journey.index, dtype="object")).fillna(
+    details = journey.get("payload_detail", pd.Series(index=journey.index, dtype="object"))
+    details = details.combine_first(
         journey.get("payload_message_preview", pd.Series(index=journey.index, dtype="object"))
     )
-    journey["Latency (ms)"] = pd.to_numeric(journey.get("latency_ms", 0), errors="coerce")
+    journey["Chi tiết"] = details.combine_first(
+        journey.get("payload_answer_preview", pd.Series(index=journey.index, dtype="object"))
+    ).fillna("")
+    latency_values = pd.to_numeric(journey.get("latency_ms", pd.NA), errors="coerce")
+    journey["Latency"] = latency_values.map(
+        lambda value: f"{value:,.0f} ms" if pd.notna(value) else "—"
+    )
 
     with st.container(border=True):
         panel_header("Log journey", f"{len(journey)} sự kiện có cùng correlation ID")
         st.dataframe(
-            journey[["Thời điểm", "Sự kiện", "Mức độ", "Chi tiết", "Latency (ms)"]],
+            journey[["Thời điểm", "Sự kiện", "Mức độ", "Chi tiết", "Latency"]],
             hide_index=True,
             column_config={
                 "Thời điểm": st.column_config.DatetimeColumn(format="HH:mm:ss.SSS", pinned=True),
                 "Sự kiện": st.column_config.TextColumn(pinned=True),
                 "Chi tiết": st.column_config.TextColumn(width="large"),
-                "Latency (ms)": st.column_config.NumberColumn(format="%.0f ms"),
+                "Latency": st.column_config.TextColumn(),
             },
         )
 
     with st.expander(":material/data_object: Xem JSON log đã chuẩn hóa"):
-        for record in journey.drop(columns=["Thời điểm", "Sự kiện", "Mức độ", "Chi tiết", "Latency (ms)"]).to_dict("records"):
+        for record in journey.drop(columns=["Thời điểm", "Sự kiện", "Mức độ", "Chi tiết", "Latency"]).to_dict("records"):
             record["timestamp"] = str(record.get("timestamp", ""))
             st.json({key: value for key, value in record.items() if not pd.isna(value)}, expanded=False)
 
