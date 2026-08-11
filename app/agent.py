@@ -32,9 +32,29 @@ class LabAgent:
     def __init__(self, model: str = "claude-sonnet-4-5") -> None:
         self.model = model
         self.llm = FakeLLM(model=model)
+        self.cache: dict[str, AgentResult] = {}
 
     @observe(as_type="generation", capture_input=False, capture_output=False)
     def run(self, user_id: str, feature: str, session_id: str, message: str) -> AgentResult:
+        if message in self.cache:
+            cached = self.cache[message]
+            result = AgentResult(
+                answer=cached.answer,
+                latency_ms=1,
+                tokens_in=0,
+                tokens_out=0,
+                cost_usd=0.0,
+                quality_score=cached.quality_score,
+            )
+            metrics.record_request(
+                latency_ms=1,
+                cost_usd=0.0,
+                tokens_in=0,
+                tokens_out=0,
+                quality_score=result.quality_score,
+            )
+            return result
+
         started = time.perf_counter()
         has_parent_trace = tracing_context_active()
         if has_parent_trace:
@@ -106,7 +126,7 @@ class LabAgent:
             quality_score=quality_score,
         )
 
-        return AgentResult(
+        res = AgentResult(
             answer=response.text,
             latency_ms=latency_ms,
             tokens_in=response.usage.input_tokens,
@@ -114,6 +134,8 @@ class LabAgent:
             cost_usd=cost_usd,
             quality_score=quality_score,
         )
+        self.cache[message] = res
+        return res
 
     def _estimate_cost(self, tokens_in: int, tokens_out: int) -> float:
         input_cost = (tokens_in / 1_000_000) * 3
