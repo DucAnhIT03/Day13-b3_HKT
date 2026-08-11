@@ -107,7 +107,10 @@ Các SLO chính thức nằm tại [`config/slo.yaml`](../config/slo.yaml): P95 
 ```powershell
 python scripts/validate_dashboard.py
 curl http://127.0.0.1:8000/metrics
+start http://127.0.0.1:8000/dashboard
 ```
+
+Endpoint `/dashboard` là triển khai runtime của spec: đọc trực tiếp `data/logs.jsonl`, lọc 60 phút gần nhất và tự refresh mỗi 30 giây. Đây là nguồn dùng để chụp evidence; `/metrics` chỉ dùng đối chiếu snapshot trong bộ nhớ.
 
 Kết quả validator hợp lệ phải chứa:
 
