@@ -7,8 +7,8 @@
 - Commit SHA triển khai chính: [`13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f)
 - Thành viên và vai trò:
   - **Nguyễn Đức Anh** — `2A202601063` — Thành viên A, API & Middleware.
-  - **Phan Văn Hiếu** — `2A202601227` — Thành viên B, Security Engineer.
-  - **Nguyễn Huy Tỏa** — `2A202601697` — Thành viên C, Metrics & Dashboard.
+  - **Nguyễn Huy Tỏa** — `2A202601697` — Thành viên B, Security Engineer.
+  - **Phan Văn Hiếu** — `2A202601227` — Thành viên C, Metrics & Dashboard. 
   - **Tạ Long Khánh** — `2A202601197` — Thành viên D, SRE & Alerts Engineer.
   - **Vũ Đăng Huy** — `2A202601761` — Thành viên E, QA & Chief Investigator.
 
@@ -57,10 +57,10 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 
 Repo sử dụng một integration commit chung cho phần triển khai; bảng dưới đây dẫn cùng commit và ghi rõ phạm vi file/nhiệm vụ của từng thành viên, không thay thế bằng lịch sử commit cá nhân giả.
 
-| Thành viên | Phần việc | Commit/PR | Điều đã học |
+| Thành viên | Phần việc | Commit/PR | Điều đã học || Nguyễn Huy Tỏa (`2A202601697`) |
 |---|---|---|---|
 | Nguyễn Đức Anh (`2A202601063`) | CP1 API & Middleware: hoàn thiện [`app/middleware.py`](../app/middleware.py), gán/propagate Correlation ID, response-time header và generic exception handler trong [`app/main.py`](../app/main.py). | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | `clear_contextvars()` ngăn request mới kế thừa context cũ; correlation ID phải xuất hiện cả response thành công lẫn lỗi để truy vết được toàn trình. |
-| Phan Văn Hiếu (`2A202601227`) | CP1 Security: bật scrub processor trong [`app/logging_config.py`](../app/logging_config.py), mở rộng regex email/phone/CCCD/thẻ/passport/địa chỉ tại [`app/pii.py`](../app/pii.py), kiểm chứng log không còn PII thô. | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | PII cần được giảm thiểu từ đầu bằng hash/summarize và scrub lần cuối trước khi ghi file; regex địa chỉ phải xử lý cả chữ hoa/thường. |
-| Nguyễn Huy Tỏa (`2A202601697`) | CP1/CP2 Metrics & Dashboard: bổ sung `error_rate_pct` trong [`app/metrics.py`](../app/metrics.py), hoàn thiện [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và dashboard evidence đủ 6 nhóm chỉ số. | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | Error rate phải dùng cả request thành công và thất bại làm mẫu số; dashboard cần cùng time range, đơn vị và SLO line để so sánh đúng incident. |
+| Nguyễn Huy Tỏa (`2A202601697`) | CP1 Security: bật scrub processor trong [`app/logging_config.py`](../app/logging_config.py), mở rộng regex email/phone/CCCD/thẻ/passport/địa chỉ tại [`app/pii.py`](../app/pii.py), kiểm chứng log không còn PII thô. | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | PII cần được giảm thiểu từ đầu bằng hash/summarize và scrub lần cuối trước khi ghi file; regex địa chỉ phải xử lý cả chữ hoa/thường. |
+| Phan Văn Hiếu (`2A202601227`) |  CP1/CP2 Metrics & Dashboard: bổ sung `error_rate_pct` trong [`app/metrics.py`](../app/metrics.py), hoàn thiện [`docs/dashboard-spec.md`](../docs/dashboard-spec.md) và dashboard evidence đủ 6 nhóm chỉ số. | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | Error rate phải dùng cả request thành công và thất bại làm mẫu số; dashboard cần cùng time range, đơn vị và SLO line để so sánh đúng incident. |
 | Tạ Long Khánh (`2A202601197`) | CP2 SRE & Alerts: thiết lập [`config/slo.yaml`](../config/slo.yaml), ba symptom-based rules trong [`config/alert_rules.yaml`](../config/alert_rules.yaml) và runbook Metrics → Traces → Logs tại [`docs/alerts.md`](../docs/alerts.md). | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | Alert theo triệu chứng/SLO phản ánh tác động người dùng và ít nhiễu hơn alert phụ thuộc tên hàm hoặc implementation có thể thay đổi. |
 | Vũ Đăng Huy (`2A202601761`) | CP2/CP3 QA & Investigation: chạy load test, instrument sub-spans RAG/LLM trong [`app/mock_rag.py`](../app/mock_rag.py) và [`app/mock_llm.py`](../app/mock_llm.py), điều tra official challenge `rag_slow`, tổng hợp evidence và báo cáo. | [Integration commit `13bca82`](https://github.com/DucAnhIT03/Day13-b3_HKT/commit/13bca8203d0fa0d431ebdf6c0147f7e4530e2b6f) | Metrics phát hiện latency spike, trace giúp khoanh vùng `retrieve`, log/correlation ID chứng minh hành trình request; blocking I/O trong async handler gây head-of-line blocking. |
